@@ -74,7 +74,7 @@ void CreatePoly(Polynomial *P, int n) {
 }
 
 void addPoly(Polynomial *Pa, Polynomial *Pb) {
-    Polynomial p1, p2, p3;
+    Polynomial p1, p2, p3, r;
     p1 = (*Pa)->next;
     p2 = (*Pb)->next;
     p3 = *Pa;
@@ -84,36 +84,42 @@ void addPoly(Polynomial *Pa, Polynomial *Pb) {
 
     while(p1 && p2) {
         printf("每次比较: p1->expn=%d, p2->expn=%d\n", p1->expn, p2->expn);
-        printf("P1_i=%d, P2_i=%d\n", p1_i, p2_i);
+//        printf("P1_i=%d, P2_i=%d\n", p1_i, p2_i);
         if(p1->expn == p2->expn) {
             sum = p1->coef + p2->coef;
             if(sum == 0) {
                 printf("相加等于0\n");
+                r = p1;
                 p1 = p1->next;
+                free(r);
+                r = p2;
                 p2 = p2->next;
-                PolyDelete(Pa, p1_i);
-                PolyDelete(Pb, p2_i);
+                free(r);
+//                PolyDelete(Pa, p1_i);
+//                PolyDelete(Pb, p2_i);
             }else {
                 p1->coef = sum;
                 p3->next = p1;
                 p3 = p1;
+                r = p2;
                 p1 = p1->next;
                 p2 = p2->next;
-                p1_i++;
-                PolyDelete(Pb, p2_i);
+//                p1_i++;
+                free(r);
+//                PolyDelete(Pb, p2_i);
                 printf("相加不等于0，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
             }
         } else if(p1->expn < p2->expn) {
             p3->next = p1;
             p3 = p1;
             p1 = p1->next;
-            p1_i++;
+//            p1_i++;
             printf("p1->expn < p2->expn，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
         } else {
             p3->next = p2;
             p3 = p2;
             p2 = p2->next;
-            p2_i++;
+//            p2_i++;
             printf("p1->expn > p2->expn，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
         }
     }

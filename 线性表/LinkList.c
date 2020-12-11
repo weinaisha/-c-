@@ -22,7 +22,7 @@ Status InitList(LinkList *L) {
     return OK;
 }
 
-Status LinstEmpty(LinkList L) {
+Status ListEmpty(LinkList L) {
     if(L->next) {
         return FALSE;
     } else {
