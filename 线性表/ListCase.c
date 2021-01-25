@@ -7,14 +7,14 @@
 typedef int Elem;
 typedef int Status;
 typedef struct PNode {
-    float coef; //系数
-    int expn;   //指数
+    float coef; //???
+    int expn;   //???
     struct PNode *next;
 }PNode, *Polynomial;
 
 /**
-案例分析与实现
-稀疏多项式的运算
+?????????????
+?????????????
 A(x)=7+3x(1)+9x(8)+5x(17)
 B(x)=8x(1)+22x(7)-9x(8)
 */
@@ -60,16 +60,16 @@ void CreatePoly(Polynomial *P, int n) {
     (*P)->next = NULL;
     for(int i = 1; i <= n; i++) {
         Polynomial s = (Polynomial)malloc(sizeof(struct PNode));
-        printf("输入第%d项系数和指数：", i);
+        printf("?????%d????????????", i);
         scanf("%f%d", &(s->coef), &(s->expn));
-        Polynomial pre = *P;                    // pre用于保存q的前驱,初值为头结点
-        Polynomial q = (*P)->next;              // 通过比较指数找到第一个大于输入项指数的项*q
+        Polynomial pre = *P;                    // pre???????q?????,????????
+        Polynomial q = (*P)->next;              // ??????????????????????????????????*q
         while(q && (q->expn < s->expn)) {
             pre = q;
             q = q->next;
         }
         pre->next = s;
-        s->next = q;                            // 将输入项s插入到q和其前驱结点pre之间
+        s->next = q;                            // ????????s????q??????????pre???
     }
 }
 
@@ -83,12 +83,12 @@ void addPoly(Polynomial *Pa, Polynomial *Pb) {
     int p2_i = 1;
 
     while(p1 && p2) {
-        printf("每次比较: p1->expn=%d, p2->expn=%d\n", p1->expn, p2->expn);
+        printf("??α??: p1->expn=%d, p2->expn=%d\n", p1->expn, p2->expn);
 //        printf("P1_i=%d, P2_i=%d\n", p1_i, p2_i);
         if(p1->expn == p2->expn) {
             sum = p1->coef + p2->coef;
             if(sum == 0) {
-                printf("相加等于0\n");
+                printf("??????0\n");
                 r = p1;
                 p1 = p1->next;
                 free(r);
@@ -107,20 +107,20 @@ void addPoly(Polynomial *Pa, Polynomial *Pb) {
 //                p1_i++;
                 free(r);
 //                PolyDelete(Pb, p2_i);
-                printf("相加不等于0，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
+                printf("????????0??p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
             }
         } else if(p1->expn < p2->expn) {
             p3->next = p1;
             p3 = p1;
             p1 = p1->next;
 //            p1_i++;
-            printf("p1->expn < p2->expn，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
+            printf("p1->expn < p2->expn??p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
         } else {
             p3->next = p2;
             p3 = p2;
             p2 = p2->next;
 //            p2_i++;
-            printf("p1->expn > p2->expn，p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
+            printf("p1->expn > p2->expn??p3->expn=%d, p3->next->expn=%d\n", p3->expn, p3->next->expn);
         }
     }
     p3->next = p1 ? p1 : p2;
@@ -134,7 +134,7 @@ int main() {
     int Pb_len = 0;
     CreatePoly(&Pa, 4);
     Pa_len = PolynomialLength(Pa);
-    printf("创建多项式Pa.length=%d\n", Pa_len);
+    printf("?????????Pa.length=%d\n", Pa_len);
     for(int i = 1; i < Pa_len+1; i++) {
         Pa_elem = *GetElem(Pa, i);
         printf("%f * x ^ %d", Pa_elem.coef, Pa_elem.expn);
@@ -144,7 +144,7 @@ int main() {
             printf(" + ");
         }     
     }
-    printf("创建多项式Pb:");
+    printf("?????????Pb:");
     CreatePoly(&Pb, 3);
     Pb_len = PolynomialLength(Pb);
     for(int j = 1; j < Pb_len+1; j++) {
@@ -156,9 +156,9 @@ int main() {
             printf(" + ");
         }
     }
-    printf("多项式Pa,Pb相加:\n");
+    printf("?????Pa,Pb???:\n");
     addPoly(&Pa, &Pb);
-    printf("多项式Pa,Pb相加结果 Pa:\n");
+    printf("?????Pa,Pb????? Pa:\n");
     Pa_len = PolynomialLength(Pa);
     for(int i = 1; i < Pa_len+1; i++) {
         Pa_elem = *GetElem(Pa, i);
@@ -169,7 +169,7 @@ int main() {
             printf(" + ");
         }     
     }
-    printf("多项式Pa,Pb相加结果 Pb:\n");
+    printf("?????Pa,Pb????? Pb:\n");
     Pb_len = PolynomialLength(Pb);
     for(int j = 1; j < Pb_len+1; j++) {
         Pb_elem = *GetElem(Pb, j);

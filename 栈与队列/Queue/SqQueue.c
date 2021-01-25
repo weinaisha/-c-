@@ -3,44 +3,51 @@
 
 #define OK 1
 #define ERROR 0
-#define MAXSIZE 100
+#define MAXSIZE 6
 
 typedef int Status;
 typedef int ElemType;
 typedef struct {
-    int maxSize;
-    ElemType* base;
-    ElemType* top;
+    ElemType data[MAXSIZE];
+    int front;
+    int rear;
 } SqQueue;
 
+// 构造一个空队列Q
 Status InitQueue(SqQueue *Q) {
-    (*Q).base = malloc(sizeof(ElemType) * MAXSIZE);
-    if(!(*Q).base) return ERROR;   // 存储分配失败
-    (*Q).top = (*Q).base;
-    (*Q).maxSize = MAXSIZE;
+    (*Q).rear = 0;
+    (*Q).front = 0;
     return OK;
 }
 
-Status QueueInsert(SqQueue *Q, ElemType e) {
-    if((*Q).top - (*Q).base == MAXSIZE) return ERROR;
-    printf("入e=%d", e);
-    *((*Q).top) = e;
-    (*Q).top++;
+// Status QueueInsert(SqQueue *Q, ElemType e) {
+//     if((*Q).top - (*Q).base == MAXSIZE) return ERROR;
+//     printf("入e=%d", e);
+//     *((*Q).top) = e;
+//     (*Q).top++;
+//     return OK;
+// }
+
+Status EnQueue(SqQueue *Q, ElemType e) {
+    (*Q).data[(*Q).rear] = e;
+    (*Q).rear++;
+    printf("front=%d", (*Q).front);
+    printf("rear=%d", (*Q).rear);
     return OK;
 }
 
-int QueueLength(SqQueue Q) {
-    return Q.top - Q.base;
+ElemType DeQueue(SqQueue *Q) {
+    ElemType e = (*Q).data[(*Q).front];
+    (*Q).front++;
+    printf("front=%d", (*Q).front);
+    return e;
 }
 
-int main() {
-    SqQueue Q;
-    Status status;
-    status = InitQueue(&Q);
-    printf("初始化队列 status=%d, top=%p, base=%p\n", status, Q.top, Q.base);
-    for(int j = 1; j<4; j++) {
-        status = QueueInsert(&Q, j);
-        printf("进队：status=%d, 进队元素=%d, length=%d\n", status, j, QueueLength(Q));
-    }
-    return 0;
+ElemType GetHead(SqQueue Q) {
+    printf("front=%d", Q.front);
+    return Q.data[Q.front];
 }
+
+// int QueueLength(SqQueue Q) {
+//     return Q.top - Q.base;
+// }
