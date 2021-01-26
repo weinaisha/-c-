@@ -3,66 +3,96 @@
 
 #define OK 1
 #define ERROR 0
-typedef int Status;
+#define MAXSIZE 10
+#define TRUE 1
+#define FALSE 0
+
 typedef int ElemType;
-typedef struct StackNode {
+typedef int Status;
+typedef struct SNode {
     ElemType data;
-    struct StackNode *next;
-} StackNode, *LinkStack;
+    struct SNode *next;
+} SNode, *LinkStack;
 
 Status InitStack(LinkStack *S) {
     *S = NULL;
     return OK;
 }
 
+Status DestroyStack(LinkStack *S) {
+}
+
+Status ClearStack(LinkStack *S) {
+    LinkStack p, q;
+    p = *S;
+    while(p) {
+        q = p;
+        p = p->next;
+        printf("清除%d，", q->data);
+        free(q);
+    }
+    return OK;
+}
+
+Status StackEmpty(LinkStack S) {
+    return (int)(S == NULL);
+}
+
 int StackLength(LinkStack S) {
-    int i = 0;
+    int count = 0;
     LinkStack p = S;
     while(p) {
+        count++;
         p = p->next;
-        i++;
     }
-    return i;
+    return count;
+}
+
+ElemType GetTop(LinkStack S) {
+    return S->data;
 }
 
 Status Push(LinkStack *S, ElemType e) {
-    LinkStack p = (*S);
-    LinkStack q;
-    q = (LinkStack)malloc(sizeof(struct StackNode));
-    q->data = e;
-    q->next = p;
-    (*S) = q;
+    LinkStack p = (LinkStack)malloc(sizeof(SNode));
+    if(!p) return ERROR;
+    p->data = e;
+    p->next = *S;
+    *S = p;
     return OK;
 }
 
 Status Pop(LinkStack *S, ElemType *e) {
-    if(!S) return ERROR;
-    LinkStack p = *S;
-    *e = (*S)->data;
-    (*S) = (*S)->next;
-    free(p);
-    return OK;
+   if(StackEmpty(*S)) return ERROR;
+   LinkStack p = *S;
+   *e = p->data;
+   *S = (*S)->next;
+   free(p);
+   return OK;
 }
 
-Status GetTop(LinkStack S, ElemType *e) {
-    if(!S) return ERROR;
-    *e = S->data;
-    return OK;
+void StackTraverse(LinkStack S) {
+    LinkStack p = S;
+    while(p) {
+        printf("%d", p->data);
+        p = p->next;
+    };
+    printf(" 遍历结束\n");
 }
 
 int main() {
     LinkStack S;
+    ElemType e;
     Status status;
-    ElemType S_top;
-    status = InitStack(&S);
-    printf("初始化空链栈: status=%d, length=%d\n", status, StackLength(S));
-    for(int i = 1; i < 4; i++) {
+    InitStack(&S);
+    for(int i = 1; i < 7; i++) {
         status = Push(&S, i);
-        printf("入栈: status=%d, 元素=%d, length=%d\n", status, i, StackLength(S));
+        printf("进栈：status=%d, 进栈元素=%d\n", status, i);
     }
-    status = GetTop(S, &S_top);
-    printf("获取栈顶元素：status=%d, S_top=%d\n", status, S_top);
-    status = Pop(&S, &S_top);
-    printf("从栈顶弹出：S_top=%d, status=%d, length=%d\n", S_top, status, StackLength(S));
+    status = Pop(&S, &e);
+    printf("出栈：status=%d, 出栈元素=%d\n", status, e);
+    printf("栈顶元素：%d\n", GetTop(S));
+    printf("元素个数：%d\n", StackLength(S));
+    StackTraverse(S);
+    status = ClearStack(&S);
     return 0;
 }
