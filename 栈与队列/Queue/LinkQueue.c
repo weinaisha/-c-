@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #define OK 1
 #define ERROR 0
 #define TRUE 1
@@ -5,35 +8,102 @@
 
 typedef int Status;
 
-typedef char ElemType;
+typedef int ElemType;
 
+// ¶ÓÁĞÔªËØ½á¹¹
 typedef struct QNode {
     ElemType data;
-    Queue head;
-    Queue tail
-} QNode, *Queue;
+    struct QNode *next;
+} QNode, *QueuePtr;
 
-Status InitQueue();
+// ¶ÓÁĞ½á¹¹
+typedef struct {
+    QueuePtr front;
+    QueuePtr rear;
+} LinkQueue;
 
-Status DestroyQueue();
+Status InitQueue(LinkQueue *Q) {
+    if(Q == NULL) return ERROR;
+    Q->front = Q->rear = (QueuePtr)malloc(sizeof(QNode));
+    if (!(Q->front)) exit(0);
+    Q->front->next = NULL;
+    return OK;
+}
 
-Status ClearQueue();
+Status DestroyQueue(LinkQueue *Q) {
+    if(Q == NULL) {
+        return ERROR;
+    }
+    
+    while((*Q).front) {
+        (*Q).rear = (*Q).front->next;
+        free((*Q).front);
+        (*Q).front = (*Q).rear;
+    }
+    
+    return OK;
+}
 
-Status QueueEmpty();
+Status QueueEmpty(LinkQueue Q) {
+    if(Q.front == Q.rear) return TRUE;
+    else {
+        return FALSE;
+    }
+}
 
-int QueueLength(Queue Q) {
+Status ClearQueue(LinkQueue *Q) {
+    if(QueueEmpty(*Q)) return OK;
+    Q->rear = Q->front->next;
+    while(Q->rear) {
+        Q->front->next = Q->rear->next;
+        free(Q->rear);
+        Q->rear = Q->front->next;
+    }
+    Q->rear = Q->front;
+    return OK;
+}
+
+int QueueLength(LinkQueue Q) {
+    if(QueueEmpty(Q)) return 0;
     int i = 0;
+    QueuePtr p = Q.front; 
+    while(p != Q.rear) {
+        i++;
+        p = p->next;
+    }
     return i;
 }
 
-GetHead();
+ElemType GetHead(LinkQueue Q) {
+    if(QueueEmpty(Q)) return ERROR;
+    return Q.front->next->data;
+}
 
-/**
-åˆå§‹æ¡ä»¶ï¼šQä¸ºéç©ºé˜Ÿåˆ—
-æ“ä½œç»“æœï¼šæ’å…¥å…ƒç´ ä¸ºQçš„é˜Ÿå°¾å…ƒç´ 
-*/
-EnQueue();
+Status EnQueue(LinkQueue *Q, ElemType e) {
+    QueuePtr p = (QueuePtr)malloc(sizeof(QNode));
+    p->data = e;
+    p->next = NULL;
+    Q->rear->next = p;
+    Q->rear = p;
+    return OK;
+}
 
-DeQueue();
+Status DeQueue(LinkQueue *Q, ElemType *e) {
+    if(QueueEmpty(*Q)) return ERROR;
+    QueuePtr p = Q->front->next;
+    *e = p->data;
+    Q->front->next = p->next;
+    if(Q->rear == p) Q->rear = Q->front; //¶ÓÁĞÖ»ÓĞ×îºóÒ»¸öÔªËØÊ±
+    free(p);
+    return OK;
+}
 
-QueueTraverse();
+void QueueTraverse(LinkQueue Q) {
+    if(QueueEmpty(Q)) return;
+    QueuePtr p = Q.front->next; 
+    while(p) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("±éÀú½áÊø\n");
+}
