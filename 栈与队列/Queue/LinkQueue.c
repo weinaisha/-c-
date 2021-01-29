@@ -10,13 +10,13 @@ typedef int Status;
 
 typedef int ElemType;
 
-// 队列元素结构
+// ????????
 typedef struct QNode {
     ElemType data;
     struct QNode *next;
 } QNode, *QueuePtr;
 
-// 队列结构
+// ???н?
 typedef struct {
     QueuePtr front;
     QueuePtr rear;
@@ -93,7 +93,7 @@ Status DeQueue(LinkQueue *Q, ElemType *e) {
     QueuePtr p = Q->front->next;
     *e = p->data;
     Q->front->next = p->next;
-    if(Q->rear == p) Q->rear = Q->front; //队列只有最后一个元素时
+    if(Q->rear == p) Q->rear = Q->front; //?????????????????
     free(p);
     return OK;
 }
@@ -105,5 +105,5 @@ void QueueTraverse(LinkQueue Q) {
         printf("%d ", p->data);
         p = p->next;
     }
-    printf("遍历结束\n");
+    printf("????????\n");
 }

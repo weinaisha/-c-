@@ -28,7 +28,7 @@ Status ClearStack(LinkStack *S) {
     while(p) {
         q = p;
         p = p->next;
-        printf("Çå³ı%d£¬", q->data);
+        printf("ï¿½ï¿½ï¿½%dï¿½ï¿½", q->data);
         free(q);
     }
     return OK;
@@ -76,23 +76,23 @@ void StackTraverse(LinkStack S) {
         printf("%d", p->data);
         p = p->next;
     };
-    printf(" ±éÀú½áÊø\n");
+    printf(" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n");
 }
 
-int main() {
-    LinkStack S;
-    ElemType e;
-    Status status;
-    InitStack(&S);
-    for(int i = 1; i < 7; i++) {
-        status = Push(&S, i);
-        printf("½øÕ»£ºstatus=%d, ½øÕ»ÔªËØ=%d\n", status, i);
-    }
-    status = Pop(&S, &e);
-    printf("³öÕ»£ºstatus=%d, ³öÕ»ÔªËØ=%d\n", status, e);
-    printf("Õ»¶¥ÔªËØ£º%d\n", GetTop(S));
-    printf("ÔªËØ¸öÊı£º%d\n", StackLength(S));
-    StackTraverse(S);
-    status = ClearStack(&S);
-    return 0;
-}
+// int main() {
+//     LinkStack S;
+//     ElemType e;
+//     Status status;
+//     InitStack(&S);
+//     for(int i = 1; i < 7; i++) {
+//         status = Push(&S, i);
+//         printf("ï¿½ï¿½Õ»ï¿½ï¿½status=%d, ï¿½ï¿½Õ»Ôªï¿½ï¿½=%d\n", status, i);
+//     }
+//     status = Pop(&S, &e);
+//     printf("ï¿½ï¿½Õ»ï¿½ï¿½status=%d, ï¿½ï¿½Õ»Ôªï¿½ï¿½=%d\n", status, e);
+//     printf("Õ»ï¿½ï¿½Ôªï¿½Ø£ï¿½%d\n", GetTop(S));
+//     printf("Ôªï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½%d\n", StackLength(S));
+//     StackTraverse(S);
+//     status = ClearStack(&S);
+//     return 0;
+// }
