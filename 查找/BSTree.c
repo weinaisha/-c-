@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OK 1;
-#define ERROR 0;
-typedef int Status;
-
 typedef struct BSNode {
     int data;
     struct BSNode *LChild, *RChild;
