@@ -1,79 +1,58 @@
 #include "AMGraph.h"
+#include "Queue.c"
 
 static FILE* fp = NULL;
-Boolean IncInfo = FALSE;
-int LocateVex(AMGraph *G, VerTexType vex) {
-    for(int i = 0; i < G->vexnum; i++) {
-        if((G->vexs)[i] == vex) return i;
-    }
-    return '\0';
-}
+int IncInfo = FALSE;
+static int visited[MAX_VERTEX_NUM]; //·ÃÎÊ±êÖ¾Êı×é£¬¼ÇÂ¼·ÃÎÊ¹ıµÄ¶¥µã
 
-Status CreateGraph(AMGraph *G, char* path[]) {
-    int readFromConsole; //æ˜¯å¦ä»æ§åˆ¶å°è¯»å–æ•°æ®
-    int kind; 
-    
-    printf("è¾“å…¥å›¾çš„ç±»å‹(0-æœ‰å‘å›¾ â”‚ 1-æœ‰å‘ç½‘ â”‚ 2-æ— å‘å›¾ â”‚ 3-æ— å‘ç½‘)ï¼š");
-    scanf("%d", &kind);
-    // ç±»å‹ä¸åˆè§„
-    if(kind < 0 || kind > 3) {
-        return ERROR;
+int LocateVex(AMGraph G, VerTexType vex) {
+    for(int i = 0; i < G.vexnum; i++) {
+        if(G.vexs[i] == vex) return i;
     }
-    // å¦‚æœæ²¡æœ‰æ–‡ä»¶è·¯å¾„ä¿¡æ¯ï¼Œåˆ™ä»æ§åˆ¶å°è¯»å–è¾“å…¥
-    readFromConsole = (path == NULL) || strcmp(path[kind], "") == 0;
-    if(readFromConsole) {
-        CreateGraphByConsole(G, kind);
-    } else {
-        fp = fopen(path[kind], "r");
-        if(fp == NULL) return ERROR;
-        fscanf(fp, "%d", &((*G).kind));
-        CreateGraphByFile(G);
-    }
-
-    return OK;
+    return -1;
 }
 
 static Status CreateGraphByConsole(AMGraph *G, int kind) {
     VerTexType v1, v2;
     ArcType w;
     int i, j, k;
-    if(kind == 0 || kind == 2) {
-        ArcCell arcs = {0, NULL};   // æœ‰å‘/æ— å‘å›¾æ¯æ¡è¾¹çš„åˆå§‹å€¼
-    }else {
-        ArcCell arcs = {INFINITE, NULL};   // æœ‰å‘/æ— å‘ç½‘æ¯æ¡è¾¹çš„åˆå§‹å€¼
+    ArcCell arc = {0, NULL};
+    if(kind == DN || kind == UDN) {
+        arc.w = INFINITE; // stuct½á¹¹Ìå³õÊ¼»¯ºÍÖØĞÂ¸³Öµ
     }
+
     (*G).kind = kind;
-    printf("è¾“å…¥å›¾çš„å½“å‰é¡¶ç‚¹æ•°:");
+    printf("ÊäÈëÍ¼µÄµ±Ç°¶¥µãÊı:");
     scanf("%d", &((*G).vexnum));
-    printf("\nè¾“å…¥å›¾çš„å½“å‰å¼§æ•°:");
+    printf("\nÊäÈëÍ¼µÄµ±Ç°»¡Êı:");
     scanf("%d", &((*G).arcnum));
-    printf("\nè¯¥æœ‰å‘å›¾çš„å¼§ä¸Šæ˜¯å¦åŒ…å«å…¶ä»–é™„åŠ ä¿¡æ¯(0-ä¸åŒ…å«â”‚1-åŒ…å«)ï¼š");
+    printf("\n¸ÃÓĞÏòÍ¼µÄ»¡ÉÏÊÇ·ñ°üº¬ÆäËû¸½¼ÓĞÅÏ¢(0-²»°üº¬©¦1-°üº¬)£º");
     scanf("%d", &IncInfo);
-    printf("\nè¾“å…¥å›¾çš„%dä¸ªé¡¶ç‚¹,ä¸åŒé¡¶ç‚¹ä¹‹é—´ç”¨ç©ºæ ¼éš”å¼€:", &(*G).vexnum);
-    // å½•å…¥é¡¶ç‚¹é›†
+    printf("\nÊäÈëÍ¼µÄ%d¸ö¶¥µã,²»Í¬¶¥µãÖ®¼äÓÃ¿Õ¸ñ¸ô¿ª:", (*G).vexnum);
+    // Â¼Èë¶¥µã¼¯
     for(i = 0; i < (*G).vexnum; i++) {
-        scanf("%d", &((*G).vexs[i]));
+        scanf(" %c", &((*G).vexs[i])); // ´ÓµÚÒ»¸ö·Ç¿Õ×Ö·û¿ªÊ¼±£´æ
     }
-    // åˆå§‹åŒ–é‚»æ¥çŸ©é˜µ
+    // ³õÊ¼»¯ÁÚ½Ó¾ØÕó
     for(i = 0; i < (*G).vexnum; i++) {
         for(j = 0; j < (*G).vexnum; j++) {
-            (*G).arcs[i][j] = arcs;
+            (*G).arcs[i][j] = arc;
         }
     }
-    printf("\nä¾æ¬¡å½•å…¥ %d æ¡å¼§çš„ä¿¡æ¯ï¼Œé¡¶ç‚¹ä¹‹é—´ç”¨ç©ºæ ¼éš”å¼€ï¼š\n", (*G).arcnum);
-    for(k = 0; k < arcnum; k++) {
-        scanf("%c", &v1);
-        scanf("%c", &v2);
-        scanf("%d", &w);
+    printf("\nÒÀ´ÎÂ¼Èë %d Ìõ»¡µÄĞÅÏ¢£¬¶¥µãÖ®¼äÓÃ¿Õ¸ñ¸ô¿ª,ÊäÈë#½áÊø ", (*G).arcnum);
+    for(k = 0; k < (*G).arcnum; k++) {
+        scanf(" %c", &v1);
+        scanf(" %c", &v2);
         i = LocateVex(*G, v1);
         j = LocateVex(*G, v2);
-        if(kind == 1 || kind == 3) {
-            (*G).vexs[i][j].w = w; //å½“ä¸ºæœ‰å‘ç½‘/æ— å‘ç½‘æ—¶å­˜åœ¨æƒå€¼æ‰§è¡Œ
-        }else {
-            (*G).vexs[i][j].w = 1;
+        if(kind == DN || kind == UDN) {
+            scanf("%d", &w);
+            (*G).arcs[i][j].w = w; //µ±ÎªÓĞÏòÍø/ÎŞÏòÍøÊ±´æÔÚÈ¨ÖµÖ´ĞĞ
+        }else if(kind == DG || kind == UDG) {
+            (*G).arcs[i][j].w = 1;
         }
-        if(kind == 2 || kind == 3) {
-            (*G).vexs[j][i] = (*G).vexs[i][j]; //å½“ä¸ºæ— å‘å›¾/ç½‘æ—¶æ‰§è¡Œ
+        if(kind == UDN || kind == UDG) {
+            (*G).arcs[j][i] = (*G).arcs[i][j]; //µ±ÎªÎŞÏòÍ¼/ÍøÊ±Ö´ĞĞ
         }
     }
     return OK;
@@ -83,8 +62,203 @@ static Status CreateGraphByFile(AMGraph *G, int kind) {
     return OK;
 }
 
+Status CreateGraph(AMGraph *G, char* path[]) {
+    int readFromConsole; //ÊÇ·ñ´Ó¿ØÖÆÌ¨¶ÁÈ¡Êı¾İ
+    int kind; 
+    
+    printf("ÊäÈëÍ¼µÄÀàĞÍ(0-ÓĞÏòÍ¼ ©¦ 1-ÓĞÏòÍø ©¦ 2-ÎŞÏòÍ¼ ©¦ 3-ÎŞÏòÍø)£º");
+    scanf("%d", &kind);
+    // ÀàĞÍ²»ºÏ¹æ
+    if(kind < 0 || kind > 3) {
+        return ERROR;
+    }
+    // Èç¹ûÃ»ÓĞÎÄ¼şÂ·¾¶ĞÅÏ¢£¬Ôò´Ó¿ØÖÆÌ¨¶ÁÈ¡ÊäÈë
+    readFromConsole = (path == NULL) || strcmp(path[kind], "") == 0;
+    if(readFromConsole) {
+        CreateGraphByConsole(G, kind);
+    } else {
+        // fp = fopen(path[kind], "r");
+        // if(fp == NULL) return ERROR;
+        // fscanf(fp, "%d", &((*G).kind));
+        CreateGraphByFile(G, kind);
+    }
+
+    return OK;
+}
+
+Status DestroyGraph(AMGraph *G) {
+    (*G).vexnum = 0;
+    (*G).arcnum = 0;
+    return OK;
+}
+
+int FirstAdjVex(AMGraph G, VerTexType v) {
+    int kv, j;
+    ArcType w;
+    kv = LocateVex(G, v);
+    if(kv == -1) return -1;
+    if(G.kind == DG || G.kind == UDG) {
+        w = 0; //Í¼
+    }else if(G.kind == DN || G.kind == UDN) {
+        w = INFINITE;
+    }else {
+        return -1;
+    }
+    for(j = 0; j < G.vexnum; j++) {
+        if(G.arcs[kv][j].w != w) {
+            return j;
+        }
+    }
+    return -1;
+}
+
+int NextAdjVex(AMGraph G, VerTexType v, VerTexType w) {
+    int kv, kw, j;
+    ArcType adj;
+    
+    kv = LocateVex(G, v);
+    if(kv == -1) {
+        return -1;    // Ö¸¶¨µÄ¶¥µã²»´æÔÚ
+    }
+    
+    kw = LocateVex(G, w);
+    if(kw == -1) {
+        return -1;    // Ö¸¶¨µÄ¶¥µã²»´æÔÚ
+    }
+    
+    // È·¶¨Ò»¸ö·ÇÁ¬Í¨±ê¼Ç
+    if(G.kind == DG || G.kind == UDG) {
+        adj = 0;        // Í¼
+    } else if(G.kind == DN || G.kind == UDN) {
+        adj = INFINITE; // Íø
+    } else {
+        return -1;
+    }
+    
+    // ´Ó¶¥µãwºó¿ªÊ¼²éÕÒ
+    for(j = kw + 1; j < G.vexnum; j++) {
+        // ÕÒµ½ÓëvÖ±½ÓÁ¬½ÓµÄ¶¥µã
+        if(G.arcs[kv][j].w != adj) {
+            return j;
+        }
+    }
+    
+    return -1;
+}
+
+void DFS(AMGraph G, int v) {
+    int w;
+    visited[v] = TRUE;
+    printf("%c->", G.vexs[v]);
+    for(w = FirstAdjVex(G, G.vexs[v]);
+        w >= 0;
+        w = NextAdjVex(G, G.vexs[v], G.vexs[w])) {
+            if(!visited[w]) DFS(G, w);
+    }
+}
+
+void DFSTraverse(AMGraph G) {
+    int i, j;
+    for(j = 0; j < G.vexnum; j++) {
+        visited[j] = FALSE;
+    }
+    for(i = 0; i < G.vexnum; i++) {
+        if(!visited[i]) DFS(G, i);
+    }
+}
+
+void BFS(AMGraph G, int v, LinkQueue *Q) {
+    int w, i;
+    visited[v] = TRUE;
+    EnQueue(Q, v);
+    while(!QueueEmpty(*Q)) {
+        DeQueue(Q, &w);
+        for(i = FirstAdjVex(G, G.vexs[w]);
+            i >= 0;
+            i = NextAdjVex(G, G.vexs[v], G.vexs[w])) {
+            if(!visited[i]) {
+                printf("%c->", G.vexs[w]);
+                visited[v] = FALSE;
+                EnQueue(Q, i);
+            }
+        }
+    }
+}
+
+void BFSTraverse(AMGraph G) {
+    int i, j;
+    int w;
+    LinkQueue Q;
+    for(i = 0; i < G.vexnum; i++) {
+        visited[i] = FALSE;
+    }
+    // ÖÃ¿Õ¸¨Öú¶ÓÁĞ
+    InitQueue(&Q);
+
+    for(i = 0; i < G.vexnum; i++) {
+        if(!visited[i]) {
+            visited[i] = TRUE;
+            printf("%c->", G.vexs[i]);
+            EnQueue(&Q, i);
+            while(!QueueEmpty(Q)) {
+                DeQueue(&Q, &w);
+                for(j = FirstAdjVex(G, G.vexs[w]);
+                    j >= 0;
+                    j = NextAdjVex(G, G.vexs[w], G.vexs[j])) {
+                    if(!visited[j]) {
+                        printf("%c->", G.vexs[j]);
+                        visited[j] = TRUE;
+                        EnQueue(&Q, j);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
+ * ÒÔÍ¼ĞÎ»¯ĞÎÊ½Êä³öµ±Ç°½á¹¹
+ *
+ * ×¢£ºÔÚÍ¼/ÍøÖĞ£¬Ê¹ÓÃ"-"À´±íÊ¾Á½¶¥µã²»Ö±½ÓÁ¬Í¨
+ */
+void PrintGraph(AMGraph G) {
+    int i, j;
+    
+    if(G.vexnum == 0) {
+        printf("¿ÕÍ¼£¬ÎŞĞè´òÓ¡£¡\n");
+        return;
+    }
+    
+    printf("µ±Ç°Í¼/Íø°üº¬ %d ¸ö¶¥µã£¬ %d Ìõ±ß/»¡...\n", G.vexnum, G.arcnum);
+    
+    printf("  ");
+    for(i = 0; i < G.vexnum; i++) {
+        printf("  %c", G.vexs[i]);
+    }
+    printf("\n");
+    
+    for(i = 0; i < G.vexnum; i++) {
+        printf("%c ", G.vexs[i]);
+        
+        for(j = 0; j < G.vexnum; j++) {
+            if(((G.kind == DG || G.kind == UDG) && G.arcs[i][j].w == 0) || ((G.kind == DN || G.kind == UDN) && G.arcs[i][j].w == INFINITE)) {
+                printf("  -");
+            } else {
+                printf("%3d", G.arcs[i][j].w);
+            }
+        }
+        
+        printf("\n");
+    }
+}
+
 int main() {
     AMGraph G;
-    CreateGraph(&G);
+    CreateGraph(&G, NULL);
+    PrintGraph(G);
+    printf("Éî¶È±éÀúÍ¼£º");
+    DFSTraverse(G);
+    printf("\n¹ã¶È±éÀúÍ¼£º");
+    BFSTraverse(G);
     return 0;
 }

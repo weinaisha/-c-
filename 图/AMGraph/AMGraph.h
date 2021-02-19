@@ -13,14 +13,21 @@
 /**
 邻接矩阵表示
 */
-#define MVNum 26
-#define MaxInt INT_MAX
+#define MAX_VERTEX_NUM 26
+#define INFINITE INT_MAX
 #define OK 1
 #define ERROR 0
 #define TRUE 1
 #define FALSE 0
 typedef int Status;
 typedef char VerTexType; //假设顶点的数据类型为字符型
+/*
+ * 顶点关系类型
+ *
+ * 在无权图中，该值通常为0或1，表示两顶点是否直接连通；
+ * 在有权图中，该值通常为权值。
+ */
+typedef int ArcType;
 
 // 图的类型
 typedef enum {
@@ -29,14 +36,6 @@ typedef enum {
     UDG,    // 2-无向图
     UDN     // 3-无向网(带权值)
 } GraphKind;
-
-/*
- * 顶点关系类型
- *
- * 在无权图中，该值通常为0或1，表示两顶点是否直接连通；
- * 在有权图中，该值通常为权值。
- */
-typedef int ArcType;
 
 // 边的相关附加信息
 typedef struct {
@@ -51,59 +50,49 @@ typedef struct ArcCell {
 } ArcCell;
 
 typedef struct {
-    VerTexType vexs[MVNum]; //顶点表
-    ArcCell arcs[MVNum][MVNum]; //邻接矩阵
+    VerTexType vexs[MAX_VERTEX_NUM]; //顶点表
+    ArcCell arcs[MAX_VERTEX_NUM][MAX_VERTEX_NUM]; //邻接矩阵
     int vexnum, arcnum; //图的当前点数和边数
     GraphKind kind;
 } AMGraph;
 
-// 边/弧上是否存在附加信息
-extern Boolean IncInfo;
-
 Status CreateGraph(AMGraph *G, char *path[]);
 
-/*
- * 构造有向图
- */
-static Status CreateDG(AMGraph *G);
+int LocateVex(AMGraph G, VerTexType vex);
 
 /*
- * 构造有向网
+ * 首个邻接点
+ *
+ * 返回顶点v的首个邻接点
  */
-static Status CreateDN(AMGraph *G);
+int FirstAdjVex(AMGraph G, VerTexType v);
 
 /*
- * 构造无向图
+ * 下一个邻接点
+ *
+ * 返回顶点v的(相对于w的)下一个邻接点
  */
-static Status CreateUDG(AMGraph *G);
+int NextAdjVex(AMGraph G, VerTexType v, VerTexType w);
 
-/*
- * 构造无向网
- */
-static Status CreateUDG(AMGraph *G);
+Status DestroyGraph(AMGraph *G);
 
-int LocateVex(AMGraph *G, VerTexType vex);
+// GetVex();
 
-FirstAdjVex();
+// PutVex();
 
-NextAdjVex();
+// InsetVex();
 
-DestroyGraph();
+// DeleteVex();
 
-GetVex();
+// InsertVrc();
 
-PutVex();
+// DeleteVrc();
 
-InsetVex();
+void DFSTraverse(AMGraph G);
 
-DeleteVex();
+// 深度优先遍历
+void DFS(AMGraph G, int v);
 
-InsertVrc();
-
-DeleteVrc();
-
-DFSTraverse();
-
-BFSTraverse();
+void BFSTraverse(AMGraph G);
 
 #endif
