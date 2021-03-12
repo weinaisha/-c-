@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+/**
+ * 二分查找
+ * 时间复杂度O(logn) 空间复杂度O(1)
+ * 顺序结构且有序
+*/
+
 int SearchBin(int *ST, int length, int key) {
     int low = 1;
     int high = length;

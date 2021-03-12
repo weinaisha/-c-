@@ -70,10 +70,10 @@ Status ListInsert(LinkList L, int i, ElemType e) {
     return OK;
 }
 
+// ����Ų���
 Status GetElem(LinkList L, int i, ElemType *e) {
-    //在带头结点的单链表L中根据序号i获取元素的值,用e返回L中第i个数据元素的值
     int j = 1;
-    LinkList p = L->next; //p指向第一个节点(首元节点)
+    LinkList p = L->next; //p指向第一个节�?(首元节点)
     while(p && j < i) { 
         //指针p为空计数器j大于i, 说明指定的序号i值不合法（i大于表长n或l小于等于0
         p = p->next;
@@ -85,7 +85,7 @@ Status GetElem(LinkList L, int i, ElemType *e) {
 }
 
 LNode *LocateElem(LinkList L, ElemType e) {
-    //在带头结点的单链表L中查找值为e的元素
+    //在带头结点的单链表L中查找值为e的元�?
     LinkList p = L->next;
     while(p && p->data != e) {
         p = p->next;
@@ -95,11 +95,11 @@ LNode *LocateElem(LinkList L, ElemType e) {
 }
 
 Status ListDelete(LinkList L, int i) {
-    // 在带头结点的单链表L中，删除第i个元素
+    // 在带头结点的单链表L中，删除第i个元�?
     int j = 0;
     LinkList p = L;
     LinkList q;
-    while(p && j < i - 1) { //查找位置i的结点并由指针p指向该结点
+    while(p && j < i - 1) { //查找位置i的结点并由指针p指向该结�?
         p = p->next;
         j++;
     }
@@ -110,7 +110,7 @@ Status ListDelete(LinkList L, int i) {
     return OK;
 }
 
-// 前插法
+// 前插�?
 void CreateList_H(LinkList *L, int n) {
     *L=(LinkList)malloc(sizeof(struct LNode));
     (*L)->next = NULL;
@@ -124,7 +124,7 @@ void CreateList_H(LinkList *L, int n) {
     return;
 }
 
-// 后插法
+// 后插�?
 void CreateList_R(LinkList *L, int n) {
     *L = (LinkList)malloc(sizeof(struct LNode));
     (*L)->next = NULL;

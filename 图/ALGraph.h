@@ -1,28 +1,28 @@
 #include <stdio.h>
 
-CreateGraph();
+void CreateGraph();
 
-DestroyGraph();
+void DestroyGraph();
 
-LocateGraph();
+void LocateGraph();
 
-GetVex();
+void GetVex();
 
-PutVex();
+void PutVex();
 
-FirstAdjVex();
+void FirstAdjVex();
 
-NextAdjVex();
+void NextAdjVex();
 
-InsetVex();
+void InsetVex();
 
-DeleteVex();
+void DeleteVex();
 
-InsertVrc();
+void InsertVrc();
 
-DeleteVrc();
+void DeleteVrc();
 
-DFSTraverse();
+void DFSTraverse();
 
-BFSTraverse();
+void BFSTraverse();
 

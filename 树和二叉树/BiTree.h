@@ -14,41 +14,41 @@ typedef int Status;
 typedef char TElemType;
 
 typedef struct BiTNode {
-    TElemType data; //ç»“ç‚¹æ•°æ®åŸŸ
-    struct BiTNode *LChild, *RChild; // å·¦å³å­©å­æŒ‡é’ˆ
+    TElemType data; //½áµãÊý¾ÝÓò
+    struct BiTNode *LChild, *RChild; // ×óÓÒº¢×ÓÖ¸Õë
 } BiTNode, *BiTree;
 
-// æž„é€ å…ˆåºå»ºç«‹äºŒå‰æ ‘
+// ¹¹ÔìÏÈÐò½¨Á¢¶þ²æÊ÷
 Status CreateBiTree(BiTree *T);
 
-// æž„é€ ç©ºäºŒå‰æ ‘T
+// ¹¹Ôì¿Õ¶þ²æÊ÷T
 Status InitBiTree(BiTree *T);
 
-// é”€æ¯äºŒå‰æ ‘T
+// Ïú»Ù¶þ²æÊ÷T
 Status DestroyBiTree(BiTree *T);
 
-// å°†æ ‘Tæ¸…ä¸ºç©ºæ ‘
+// ½«Ê÷TÇåÎª¿ÕÊ÷
 Status ClearBiTree(BiTree *T);
 
-// è¿”å›žäºŒå‰æ ‘æ·±åº¦
+// ·µ»Ø¶þ²æÊ÷Éî¶È
 int BiTreeDepth(BiTree T);
 
-// äºŒå‰æ ‘æ˜¯å¦ä¸ºç©º
+// ¶þ²æÊ÷ÊÇ·ñÎª¿Õ
 Status BiTreeEmpty(BiTree T);
 
 /**
-åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘å­˜åœ¨ï¼Œeæ˜¯Tä¸­çš„æŸä¸ªç»“ç‚¹
-æ“ä½œç»“æžœï¼šè¿”å›žeçš„å€¼
+³õÊ¼Ìõ¼þ£º¶þ²æÊ÷´æÔÚ£¬eÊÇTÖÐµÄÄ³¸ö½áµã
+²Ù×÷½á¹û£º·µ»ØeµÄÖµ
 */
 TElemType Value(BiTree T, TElemType e);
 
-// è¿”å›žTçš„æ ¹
+// ·µ»ØTµÄ¸ù
 TElemType Root(BiTree T);
 
-// eæ˜¯äºŒå‰æ ‘Tä¸­çš„ä¸€ä¸ªç»“ç‚¹ï¼Œç»™eèµ‹å€¼
+// eÊÇ¶þ²æÊ÷TÖÐµÄÒ»¸ö½áµã£¬¸øe¸³Öµ
 Status Assign(BiTree *T, TElemType e, TElemType value);
 
-// eæ˜¯äºŒå‰æ ‘Tä¸­çš„ç»“ç‚¹ï¼Œè‹¥eä¸æ˜¯æ ¹ç»“ç‚¹åˆ™è¿”å›žeçš„åŒäº²
+// eÊÇ¶þ²æÊ÷TÖÐµÄ½áµã£¬Èôe²»ÊÇ¸ù½áµãÔò·µ»ØeµÄË«Ç×
 TElemType Parent(BiTree T, TElemType e);
 
 TElemType LeftChild(BiTree T, TElemType e);
@@ -60,33 +60,33 @@ TElemType LeftSibling(BiTree T, TElemType e);
 TElemType RightSibling(BiTree T, TElemType e);
 
 /*
-åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘Tå­˜åœ¨,pæŒ‡å‘Tä¸­æŸä¸ªç»“ç‚¹ï¼ŒLRä¸º0æˆ–1, éžç©ºäºŒå‰æ ‘ c ä¸Ž T ä¸ç›¸äº¤ä¸”å³å­æ ‘ä¸ºç©º
-æ“ä½œç»“æžœï¼šæ ¹æ® LR ä¸º 0 æˆ– 1, æ’å…¥ c ä¸º Tä¸­ p æ‰€æŒ‡ç»“ç‚¹çš„å·¦æˆ–å³å­æ ‘ã€‚p æ‰€æŒ‡ç»“ç‚¹çš„åŽŸæœ‰å·¦æˆ–å³å­æ ‘åˆ™æˆ
-ä¸º cçš„å³å­æ ‘
+³õÊ¼Ìõ¼þ£º¶þ²æÊ÷T´æÔÚ,pÖ¸ÏòTÖÐÄ³¸ö½áµã£¬LRÎª0»ò1, ·Ç¿Õ¶þ²æÊ÷ c Óë T ²»Ïà½»ÇÒÓÒ×ÓÊ÷Îª¿Õ
+²Ù×÷½á¹û£º¸ù¾Ý LR Îª 0 »ò 1, ²åÈë c Îª TÖÐ p ËùÖ¸½áµãµÄ×ó»òÓÒ×ÓÊ÷¡£p ËùÖ¸½áµãµÄÔ­ÓÐ×ó»òÓÒ×ÓÊ÷Ôò³É
+Îª cµÄÓÒ×ÓÊ÷
 */
 Status InsertChild(BiTree *T, TElemType p, int LR, BiTree *c);
 
 Status DeleteChild(BiTree *T, TElemType p, int LR);
 
 /*
-åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘Tå­˜åœ¨ã€‚
-æ“ä½œç»“æžœï¼šå…ˆåºéåŽ†T, å¯¹æ¯ä¸ªç»“ç‚¹è®¿é—®ä¸€æ¬¡ã€‚
+³õÊ¼Ìõ¼þ£º¶þ²æÊ÷T´æÔÚ¡£
+²Ù×÷½á¹û£ºÏÈÐò±éÀúT, ¶ÔÃ¿¸ö½áµã·ÃÎÊÒ»´Î¡£
 */
 void PreOrderTraverse(BiTree T);
 
 /*
-åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘Tå­˜åœ¨
-æ“ä½œç»“æžœï¼šä¸­åºéåŽ†T, å¯¹æ¯ä¸ªç»“ç‚¹è®¿é—®ä¸€æ¬¡ã€‚
+³õÊ¼Ìõ¼þ£º¶þ²æÊ÷T´æÔÚ
+²Ù×÷½á¹û£ºÖÐÐò±éÀúT, ¶ÔÃ¿¸ö½áµã·ÃÎÊÒ»´Î¡£
 */
 void InOrderTraverse(BiTree T);
 
 /*
-åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘Tå­˜åœ¨ã€‚
-æ“ä½œç»“æžœï¼šåŽåºéåŽ†T, å¯¹æ¯ä¸ªç»“ç‚¹è®¿é—®ä¸€æ¬¡
+³õÊ¼Ìõ¼þ£º¶þ²æÊ÷T´æÔÚ¡£
+²Ù×÷½á¹û£ººóÐò±éÀúT, ¶ÔÃ¿¸ö½áµã·ÃÎÊÒ»´Î
 */
 void PostOrderTraverse(BiTree T);
 
 void LevelOrderTraverse(BiTree T);
-//åˆå§‹æ¡ä»¶ï¼šäºŒå‰æ ‘Tå­˜åœ¨ã€‚
-//æ“ä½œç»“æžœï¼šå±‚åºéåŽ†T, å¯¹æ¯ä¸ªç»“ç‚¹è®¿é—®ä¸€æ¬¡
+//³õÊ¼Ìõ¼þ£º¶þ²æÊ÷T´æÔÚ¡£
+//²Ù×÷½á¹û£º²ãÐò±éÀúT, ¶ÔÃ¿¸ö½áµã·ÃÎÊÒ»´Î
 #endif

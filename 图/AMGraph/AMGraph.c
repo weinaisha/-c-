@@ -167,24 +167,6 @@ void DFSTraverse(AMGraph G) {
     }
 }
 
-void BFS(AMGraph G, int v, LinkQueue *Q) {
-    int w, i;
-    visited[v] = TRUE;
-    EnQueue(Q, v);
-    while(!QueueEmpty(*Q)) {
-        DeQueue(Q, &w);
-        for(i = FirstAdjVex(G, G.vexs[w]);
-            i >= 0;
-            i = NextAdjVex(G, G.vexs[v], G.vexs[w])) {
-            if(!visited[i]) {
-                printf("%c->", G.vexs[w]);
-                visited[v] = FALSE;
-                EnQueue(Q, i);
-            }
-        }
-    }
-}
-
 void BFSTraverse(AMGraph G) {
     int i, j;
     int w;
