@@ -173,36 +173,98 @@ void case8() {
     SqList A;
     SqList B;
     SqList C;
-    int i = 0, m = 0, n = 0;
+    int i = 0, m = 0, n = 0, mid;
+    elementType temp;
     create(&A, 3);
     create(&B, 3);
     m = A.length;
     n = B.length;
     InitSqList(&C);
-    for (i = 0; i < m+n; i++)
+    printf("包含两个顺序表AB的一维数组:");
+    for (i = 0; i < m + n; i++)
     {
-        C.data[i] = 1;
+        if(i < m) C.data[i] = A.data[i];
+        else
+        {
+            C.data[i] = B.data[i - m];
+        }
+        printf("%d ", C.data[i]);
     }
-    
+    C.length = m + n;
+    mid = (m + n) / 2;
+    for (i = 0; i < mid; i++) {
+        temp = C.data[i];
+        C.data[i] = C.data[m + n - 1 - i];
+        C.data[m + n - 1 - i] = temp;
+    }
+    for (i = 0; i < n/2; i++) {
+        temp = C.data[i];
+        C.data[i] = C.data[n - 1 - i];
+        C.data[n - 1 - i] = temp;
+    }
+    for (i = 0; i < m/2; i++) {
+        temp = C.data[n+i];
+        C.data[n+i] = C.data[m + n - 1 - i];
+        C.data[m + n - 1 - i] = temp;
+    }
+    printf("\n输出线性表：");
+    for (i = 0; i < C.length; i++)
+    {
+        printf("%d ", C.data[i]);
+    }
+    printf("\n");
 }
 
 /**
  * question 9
- * for 查找x, r[i] == x 交换 r[i] = r[i+1]; r[i+1]=x
- * if r[i] < x 下标存入r[0]
- * x 存在的flag为false for 移动元素插入x
+ * 折半查找x, 
+ * 查找成功：r[i] == x 交换 r[i] = r[i+1]; r[i+1]=x
+ * 不存在：移动元素插入x
 */
+void case9(int x) {
+    SqList r;
+    create(&r, 7);
+    int low = 0, high = r.length - 1, mid = 0, k;
+    while (low <= high)
+    {
+        mid = (low + high) / 2;
+        if(r.data[mid] == x) break;
+        if(r.data[mid] < x) low = mid + 1;
+        else
+        {
+            high = mid - 1;
+        }  
+    }
+    if(r.data[mid] == x && mid != r.length - 1) {
+        r.data[mid] = r.data[mid + 1];
+        r.data[mid + 1] = x;
+    }
+    if(low > high) {
+        for (k = r.length - 1; k > high; k--)
+        {
+            r.data[k+1] = r.data[k];
+        }
+        r.data[k + 1] = x;
+        r.length++;
+    }
+    printf("\n输出线性表：");
+    for (k = 0; k < r.length; k++)
+    {
+        printf("%d ", r.data[k]);
+    }
+    printf("\n");
+}
 
 /**
  * question 10 ?借借助r[0]
 */
 
 /**
- * 
+ * question 11? 统考
 */
 
 /**
- * question 13 O(n^2)
+ * question 13 O(n^2) ？统考
  * n = 已知整数数组长度
  * for i = 1; i<=n i++ 遍历查找
  * for 遍历已知数组
@@ -217,6 +279,8 @@ int main() {
     // case3(12);
     // printf("例题7：合并两个有序顺序表为一个有序顺序表\n");
     // case7();
+    // case8();
+    // case9(5);
     return 0;
 }
 

@@ -1,15 +1,17 @@
 #include <stdio.h>
+#include <stdlib.h>
 /**
  * 并归排序
 */
 
 void Merge(int *R, int *T, int low, int mid, int high) {
-    int i, j, k;
+    int i, j, k, a, b;
     i = low;
     j = mid + 1;
     k = low;
     while (i <= mid && j <= high)
     {
+        // printf("比较：R[i]=%d, mid=%d, high=%d\n", low, mid, high);
         if (R[i] <= R[j]) T[k] = R[i++];
         else
         {
@@ -33,12 +35,11 @@ void MSort(int *R, int *T, int low, int high) {
     if(low == high) T[low] = R[low];
     else
     {
-        mid = (low + high) / 2;
-        MSort(R, S, low, mid);
-        MSort(R, S, mid + 1, high);
-        Merge(S, T, low, mid, high);
+        mid = (low + high) / 2; 
+        MSort(R, S, low, mid); // 分成一半
+        MSort(R, S, mid + 1, high); // 分成一半
+        Merge(S, T, low, mid, high); // 归并子程序
     }
-    
 }
 
 void MergeSort(int *r) {

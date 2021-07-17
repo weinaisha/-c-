@@ -89,4 +89,14 @@ void PostOrderTraverse(BiTree T);
 void LevelOrderTraverse(BiTree T);
 //初始条件：二叉树T存在。
 //操作结果：层序遍历T, 对每个结点访问一次
+
+//借助栈非递归先序遍历
+void PreOrderTraverseByStack(BiTree T);
+
+//借助栈非递归中序遍历
+void InOrderTraverseByStack(BiTree T);
+
+//借助栈非递归后序遍历
+void PostOrderTraverseByStack(BiTree T);
+
 #endif

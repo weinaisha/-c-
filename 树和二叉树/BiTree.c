@@ -6,6 +6,31 @@
 char str[] = "ABC##DE#G##F###";
 int i = 0;
 
+typedef struct {
+    BiTNode *rear;
+    BiTNode *front;
+} Stack;
+
+void InitStack(Stack *S) {
+    S->rear = (BiTree)malloc(sizeof(BiTNode) * MAXSIZE);
+    S->front = S->rear;
+}
+
+BiTNode popStack(Stack *S) {
+    if(S->front == S->front) return;
+    return *(S->rear--);
+}
+
+void pushStack(Stack *S, BiTNode e) {
+    if(S->rear - S->front >= MAXSIZE) return;
+    *(S->rear) = e;
+    S->rear++;
+}
+
+int isEmptyStack(Stack S) {
+    return S.rear == S.front ? 1 : 0;
+}
+
 // 返回指向二叉树结点e的指针
 static BiTree EPtr(BiTree T, TElemType e) {
     BiTree pl, pr;
@@ -203,10 +228,6 @@ void InOrderTraverse(BiTree T) {
     }
 }
 
-void InOrderTraverseByStack(BiTree T) {
-
-}
-
 void PostOrderTraverse(BiTree T) {
     if(T) {
         PostOrderTraverse(T->LChild);
@@ -225,5 +246,43 @@ void LevelOrderTraverse(BiTree T) {
     */
 }
 
+void InOrderTraverseByStack(BiTree T) {
+    Stack S;
+    BiTree q = T;
+    BiTNode p;
+    InitStack(&S);
+    while (q || !isEmptyStack(S))
+    {
+        if (q)
+        {
+            pushStack(&S, *q);
+            q = q->LChild;
+        } else
+        {
+            p = popStack(&S);
+            printf("%c ", p.data);
+            q = q->RChild;
+        }
+    }
+}
 
+void PreOrderTraverseByStack(BiTree T) {
+    Stack S;
+    BiTNode p;
+    BiTree q = T;
+    InitStack(&S);
+    while (q || !isEmptyStack(S))
+    {
+        if(q) {
+            printf("%c", q->data);
+            pushStack(&S, *q);
+            q = q->LChild;
+        } else
+        {
+            p = popStack(&S);
+            q = p.RChild;
+        }
+    }
+    
+}
 #endif

@@ -1,11 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * ÏßË÷¶ş²æÊ÷
+*/
+
 #define OK 1;
 #define ERROR 0;
 typedef char ElemType;
 typedef int Status;
 
+/**
+ * LTag=0,LChildÖ¸Ïò½áµã×óº¢×Ó£¬LTag=1,LChildÖ¸Ïò½áµãÇ°Çı
+ * RTag=0,RChildÖ¸Ïò½áµãÓÒº¢×Ó£¬RTag=1,RChildÖ¸Ïò½áµãºó¼Ì
+*/
 typedef struct ThrNode {
     ElemType data;
     struct ThrNode *LChild, *RChild;
@@ -14,15 +22,15 @@ typedef struct ThrNode {
 
 BiThrTree pre;
 
-// è¿”å›æŒ‡å‘äºŒå‰æ ‘ç»“ç‚¹eçš„æŒ‡é’ˆ
+// è¿”å›æŒ‡å‘äºŒå‰æ ‘ç»“ç‚¹eçš„æŒ‡é’?
 static BiThrTree EPtr(BiThrTree T, ElemType e) {
     BiThrTree p;
     p = T->LChild;
     while(p != T) {
-        while(p->LTag == 0) p = p->LChild; // æ²¿å·¦å­©å­å‘ä¸‹
+        while(p->LTag == 0) p = p->LChild; // ×óº¢×Ó
         if(p->data == e) return p;
         while(p->RTag == 1 && p->RChild != T) {
-            p = p->RChild; // æ²¿å³çº¿ç´¢è®¿é—®åç»§ç»“ç‚¹
+            p = p->RChild; // ºó¼Ì
             if(p->data == e) return p;
         }
         p = p->RChild;
@@ -43,20 +51,19 @@ Status CreateBiTree(BiThrTree *T) {
     return OK;
 }
 
-// ä»¥ç»“ç‚¹pä¸ºæ ¹çš„å­æ ‘ä¸­åºçº¿ç´¢åŒ–
-
+//ÖĞĞò±éÀú¶Ô¶ş²æÊ÷ÏßË÷»¯
 void InThreading(BiThrTree *p) {
     if(*p) {
         InThreading(&((*p)->LChild));
         if(!(*p)->LChild) {
-            (*p)->LTag = 1;     // ç»™påŠ ä¸Šçº¿ç´¢
-            (*p)->LChild = pre; // pçš„å·¦å­©å­æŒ‡é’ˆæŒ‡å‘pre(å‰é©±)
+            (*p)->LTag = 1;     // Ç°Çı
+            (*p)->LChild = pre; // ×óÖ¸ÕëÎª¿ÕÖ¸ÏòpµÄÇ°Çıpre
         } else {
             (*p)->LTag = 0;
         }
         if(!(pre->RChild)) {
-            pre->RChild = *p; // å‰é©±çš„å³å­©å­æŒ‡å‘p(åç»§)
-            pre->RTag = 1;   // ç»™å‰é©±åŠ ä¸Šçº¿ç´¢
+            pre->RChild = *p; // preÓÒÖ¸ÕëÎª¿ÕÖ¸Ïòp
+            pre->RTag = 1;   // ±êÖ¾Îªºó¼Ì
         }
         else (*p)->RTag = 0;
         pre = *p;
@@ -64,8 +71,7 @@ void InThreading(BiThrTree *p) {
     }
 }
 
-// å¸¦å¤´ç»“ç‚¹çš„äºŒå‰æ ‘ä¸­åºçº¿ç´¢åŒ–
-
+// Í¨¹ıÖĞĞò±éÀú½¨Á¢ÖĞĞòÏßË÷¶ş²æÊ÷
 void InOrderThreading(BiThrTree *Thrt, BiThrTree *T) {
     *Thrt = (BiThrTree)malloc(sizeof(ThrNode));
     (*Thrt)->LTag = 0;
@@ -76,13 +82,13 @@ void InOrderThreading(BiThrTree *Thrt, BiThrTree *T) {
         (*Thrt)->LChild = *T;
         pre = *Thrt;
         InThreading(&(*T));
-        pre->RChild = (*Thrt);
+        pre->RChild = (*Thrt); // ´¦Àí±éÀúµÄ×îºóÒ»¸ö½áµã
         pre->RTag = 1;
         (*Thrt)->RChild = pre;
     }
 }
 
-// éå†ä¸­åºçº¿ç´¢äºŒå‰æ ‘
+// éå†ä¸­åºçº¿ç´¢äºŒå‰æ ?
 void InOrderTraverse_Thr(BiThrTree T) {
     BiThrTree p;
     p = T->LChild;
@@ -134,19 +140,19 @@ int main() {
     BiThrTree p2;
     Status status;
     status = CreateBiTree(&T);
-    printf("åˆ›å»ºäºŒå‰æ ‘ status=%d\n", status);
+    printf("åˆ›å»ºäºŒå‰æ ? status=%d\n", status);
     InOrderTraverse(T);
     printf("éå†ä¸­åºäºŒå‰æ ‘\n");
     InOrderThreading(&ThrTree, &T);
     InOrderTraverse_Thr(ThrTree);
     printf("éå†ä¸­åºçº¿ç´¢äºŒå‰æ ‘\n");
     p1 = EPtr(ThrTree, 'A');
-    printf("æŸ¥æ‰¾Aç»“ç‚¹çš„æŒ‡é’ˆ=%c\n", p1->data);
-    printf("Açš„å‰é©±=%c\n", ValuePre(p1));
-    printf("Açš„åé©±=%c\n", ValueNext(p1));
+    printf("æŸ¥æ‰¾Aç»“ç‚¹çš„æŒ‡é’?=%c\n", p1->data);
+    printf("Açš„å‰é©?=%c\n", ValuePre(p1));
+    printf("Açš„åé©?=%c\n", ValueNext(p1));
     p2 = EPtr(ThrTree, 'C');
-    printf("æŸ¥æ‰¾Cç»“ç‚¹çš„æŒ‡é’ˆ=%c\n", p2->data);
-    printf("Cçš„å‰é©±=%c\n", ValuePre(p2));
-    printf("Cçš„åé©±=%c\n", ValueNext(p2));
+    printf("æŸ¥æ‰¾Cç»“ç‚¹çš„æŒ‡é’?=%c\n", p2->data);
+    printf("Cçš„å‰é©?=%c\n", ValuePre(p2));
+    printf("Cçš„åé©?=%c\n", ValueNext(p2));
     return 0;
 }

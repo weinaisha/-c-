@@ -18,12 +18,12 @@ typedef struct LNode *LinkList;
 Status InitList(LinkList *L) {
     *L = (LinkList)malloc(sizeof(struct LNode)); //浜х敓澶寸粨鐐癸紝骞朵娇L鎸囧悜姝ゅご缁撶偣
     if(!(*L)) return ERROR; // 鍒嗛厤澶辫触
-    (*L)->next = NULL;
+    (*L)->next = NULL; //循环单链表不同指向L本身：(*L)->next = *L
     return OK;
 }
 
 Status ListEmpty(LinkList L) {
-    if(L->next) {
+    if(L->next == NULL) {
         return FALSE;
     } else {
         return TRUE;
@@ -31,9 +31,9 @@ Status ListEmpty(LinkList L) {
 }
 
 Status clearList(LinkList L) {
-    if(!L->next) return ERROR;
+    if(L->next == NULL) return ERROR;
     LinkList p, q;
-    p = L->next;
+    p = L->next; //循环单链表判断是否循环结束 p == L
     while(p) {
         q = p->next;
         free(p);
